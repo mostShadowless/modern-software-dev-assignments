@@ -9,7 +9,11 @@ load_dotenv()
 NUM_RUNS_TIMES = 5
 
 # TODO: Fill this in! Try to get as close to 100% correctness across all runs as possible.
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = (
+    "Let's think step by step. "
+    "First find the position of each stop, then compute the distance between them. "
+    "End with 'Answer: <number>' on its own line."
+)
 
 USER_PROMPT = """
 Solve this problem, then give the final answer on the last line as "Answer: <number>".
@@ -48,12 +52,12 @@ def test_your_prompt(system_prompt: str) -> bool:
     for idx in range(NUM_RUNS_TIMES):
         print(f"Running test {idx + 1} of {NUM_RUNS_TIMES}")
         response = chat(
-            model="llama3.1:8b",
+            model="mistral-nemo:12b",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": USER_PROMPT},
             ],
-            options={"temperature": 1},
+            options={"temperature": 0.3},
         )
         output_text = response.message.content
         final_answer = extract_final_answer(output_text)

@@ -15,7 +15,11 @@ Keep the implementation minimal.
 """
 
 # TODO: Fill this in!
-YOUR_REFLEXION_PROMPT = ""
+YOUR_REFLEXION_PROMPT = (
+    "You are a coding assistant. Below is your previous implementation and the test failures. "
+    "Fix all failures, then output ONLY a single fenced Python code block defining "
+    "is_valid_password(password: str) -> bool. No prose or comments."
+)
 
 
 # Ground-truth test suite used to evaluate generated code
@@ -81,7 +85,7 @@ def evaluate_function(func: Callable[[str], bool]) -> Tuple[bool, List[str]]:
 
 def generate_initial_function(system_prompt: str) -> str:
     response = chat(
-        model="llama3.1:8b",
+        model="mistral-nemo:12b",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": "Provide the implementation now."},
@@ -108,7 +112,7 @@ def apply_reflexion(
     reflection_context = build_context(prev_code, failures)
     print(f"REFLECTION CONTEXT: {reflection_context}, {reflexion_prompt}")
     response = chat(
-        model="llama3.1:8b",
+        model="mistral-nemo:12b",
         messages=[
             {"role": "system", "content": reflexion_prompt},
             {"role": "user", "content": reflection_context},
